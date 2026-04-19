@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+  functions = "functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+
+[[redirects]]
+  from = "/api/paystack/*"
+  to = "/.netlify/functions/paystack-webhook/:splat"
+  status = 200
