@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CleanGuard Debug — Check Firestore</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:#0a0a0f;color:#f1f5f9;font-family:monospace;padding:20px;}
+    .container{max-width:800px;margin:0 auto;}
+    h1{font-size:20px;margin-bottom:20px;}
+    .input-group{margin-bottom:16px;}
+    label{display:block;font-size:12px;color:#64748b;margin-bottom:4px;}
+    input{width:100%;padding:8px;background:#111827;border:1px solid #1e293b;border-radius:6px;color:#f1f5f9;font-family:monospace;}
+    button{padding:10px 16px;background:#22c55e;color:#000;font-weight:700;border:none;border-radius:6px;cursor:pointer;margin-top:12px;}
+    button:hover{background:#16a34a;}
+    .output{background:#111827;border:1px solid #1e293b;border-radius:6px;padding:16px;margin-top:20px;font-size:12px;max-height:500px;overflow-y:auto;}
+    .success{color:#86efac;}
+    .error{color:#ef4444;}
+    .warn{color:#facc15;}
+    .info{color:#60a5fa;}
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🛡 CleanGuard Debug Panel</h1>
+  
+  <div class="input-group">
+    <label>Your email address (the one you paid with)</label>
+    <input type="email" id="userEmail" placeholder="moohil109@gmail.com"/>
+  </div>
+  
+  <button onclick="checkPaymentsDoc()">Check Payments in Firestore</button>
+  <button onclick="checkLocalStorage()">Check LocalStorage</button>
+  <button onclick="checkNetlifyFunction()">Test Netlify Function</button>
+  
+  <div class="output" id="output"></div>
+</div>
+
+<script>
+  const KEY = "AIzaSyABKGu9feYP7eK-dFI4DDLR29SqM_bHDLA";
+  const PID = "cleanguard-493c2";
+  
+  function log(type, msg) {
+    const out = document.getElementById("output");
+    const line = document.createElement("div");
+    line.className = type;
+    line.textContent = `[${type.toUpperCase()}] ${msg}`;
+    out.appendChild(line);
+    out.scrollTop = out.scrollHeight;
+  }
+  
+  async function checkPaymentsDoc() {
+    const email = document.getElementById("userEmail").value.trim();
+    if (!email) { alert("Enter email"); return; }
+    
+    document.getElementById("output").innerHTML = "";
+    const docId = email.toLowerCase().replace(/[^a-z0-9]/g, "_");
+    const url = `https://firestore.googleapis.com/v1/projects/${PID}/databases/(default)/documents/payments/${docId}?key=${KEY}`;
+    
+    log("info", `Looking for: payments/${docId}`);
+    log("info", `Firestore URL: ${url.substring(0, 80)}...`);
+    
+    try {
+      const res = await fetch(url);
+      log("info", `Response: ${res.status} ${res.statusText}`);
+      
+      if (res.ok) {
+        const doc = await res.json();
+        log("success", "Document FOUND in Firestore ✓");
+        const plan = doc.fields?.plan?.stringValue;
+        const active = doc.fields?.active?.booleanValue;
+        log("success", `Plan: ${plan}`);
+        log("success", `Active: ${active}`);
+        if (plan === "premium" && active) {
+          log("success", "✓ Premium is active in Firestore!");
+        }
+      } else {
+        log("error", "Document NOT found in Firestore");
+        log("warn", "This means the webhook didn't write it, OR");
+        log("warn", "Firestore rules block reading it (check Firebase Console)");
+        const text = await res.text();
+        if (text) log("error", text.substring(0, 200));
+      }
+    } catch(e) {
+      log("error", "Network error: " + e.message);
+    }
+  }
+  
+  function checkLocalStorage() {
+    document.getElementById("output").innerHTML = "";
+    const items = ["cg_uid", "cg_email", "cg_plan", "cg_token", "cg_streak"];
+    for (const key of items) {
+      const val = localStorage.getItem(key);
+      if (val) {
+        log("info", `${key}: ${val.substring(0, 50)}${val.length > 50 ? "..." : ""}`);
+      } else {
+        log("warn", `${key}: NOT SET`);
+      }
+    }
+  }
+  
+  async function checkNetlifyFunction() {
+    document.getElementById("output").innerHTML = "";
+    const ref = prompt("Enter Paystack reference (from payment-success URL):");
+    if (!ref) return;
+    
+    const url = "/.netlify/functions/paystack-webhook/verify?reference=" + encodeURIComponent(ref);
+    log("info", "Testing Netlify function...");
+    log("info", `URL: ${url}`);
+    
+    try {
+      const res = await fetch(url);
+      log("info", `Status: ${res.status}`);
+      const data = await res.json();
+      log("success", JSON.stringify(data, null, 2));
+    } catch(e) {
+      log("error", "Error: " + e.message);
+    }
+  }
+</script>
+</body>
+</html>
