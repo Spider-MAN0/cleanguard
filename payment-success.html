@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Successful — CleanGuard Premium</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#080810;color:#f1f5f9;font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .card{background:#111827;border:1px solid #1e293b;border-radius:24px;padding:48px 40px;width:100%;max-width:480px;text-align:center;}
+    .icon{font-size:64px;margin-bottom:16px;}
+    h1{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;margin-bottom:8px;}
+    p{color:#64748b;font-size:15px;line-height:1.6;margin-bottom:20px;}
+    .features{background:#0a0a0f;border-radius:14px;padding:20px;margin-bottom:28px;text-align:left;display:flex;flex-direction:column;gap:10px;}
+    .feat{display:flex;gap:10px;font-size:14px;}
+    .feat::before{content:"✓";color:#22c55e;font-weight:700;flex-shrink:0;}
+    .btn{display:block;padding:14px;background:#22c55e;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;border-radius:12px;text-decoration:none;margin-bottom:12px;transition:background 0.2s;border:none;cursor:pointer;width:100%;}
+    .btn:hover{background:#16a34a;}
+    .btn-sec{background:transparent;border:1px solid #1e293b;color:#64748b;}
+    .btn-sec:hover{border-color:#334155;color:#94a3b8;}
+    .note{font-size:12px;color:#475569;margin-top:16px;}
+    .step{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:12px 16px;font-size:13px;color:#86efac;margin-bottom:12px;text-align:left;}
+    .spinner{width:20px;height:20px;border:2px solid rgba(34,197,94,0.3);border-top-color:#22c55e;border-radius:50%;animation:spin 0.7s linear infinite;margin:0 auto 16px;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div id="verifying">
+      <div class="spinner"></div>
+      <h1>Verifying payment...</h1>
+      <p>Just a moment.</p>
+    </div>
+
+    <div id="success" style="display:none">
+      <div class="icon">🎉</div>
+      <h1>Welcome to Premium!</h1>
+      <p>Payment confirmed. Your account has been upgraded.</p>
+      <div class="features">
+        <div class="feat">Accountability partner alerts</div>
+        <div class="feat">Streak freeze (once per week)</div>
+        <div class="feat">Scheduled lock</div>
+        <div class="feat">Behavioral insights dashboard</div>
+        <div class="feat">Cross-device sync</div>
+      </div>
+      <div class="step">
+        <strong>Next steps:</strong><br>
+        1. Open CleanGuard extension<br>
+        2. Premium panel will appear automatically<br>
+        3. Start using premium features!
+      </div>
+      <button class="btn" onclick="openExtension()">Open CleanGuard Extension</button>
+      <a href="index.html" class="btn btn-sec">← Back to Home</a>
+      <p class="note">Any issues? cleanguard001@gmail.com</p>
+    </div>
+
+    <div id="failed" style="display:none">
+      <div class="icon">❌</div>
+      <h1>Could not verify payment</h1>
+      <p>If you were charged, we'll fix it immediately.</p>
+      <a href="mailto:cleanguard001@gmail.com?subject=Payment Not Verified" class="btn">Contact Support</a>
+      <a href="premium.html" class="btn btn-sec">Try Payment Again</a>
+    </div>
+
+  </div>
+
+  <script>
+    var BACKEND = "/.netlify/functions/paystack-webhook";
+    var KEY = "AIzaSyABKGu9feYP7eK-dFI4DDLR29SqM_bHDLA";
+    var PID = "cleanguard-493c2";
+
+    async function verifyAndActivate() {
+      var params = new URLSearchParams(window.location.search);
+      var reference = params.get("reference") || params.get("trxref");
+
+      if (!reference) {
+        show("failed");
+        return;
+      }
+
+      try {
+        // Backend verifies and writes to Firestore
+        var res = await fetch(BACKEND + "/verify?reference=" + encodeURIComponent(reference));
+        var data = await res.json();
+
+        if (data.success && data.email) {
+          // Also do a direct write as backup
+          await writeToFirestore(data.email, "premium");
+          // Store reference in case popup needs it
+          localStorage.setItem("lastPaymentRef", reference);
+          localStorage.setItem("lastPaymentEmail", data.email);
+          show("success");
+        } else {
+          show("failed");
+        }
+      } catch (e) {
+        console.error("Error:", e);
+        show("failed");
+      }
+    }
+
+    async function writeToFirestore(email, plan) {
+      try {
+        var docId = email.toLowerCase().replace(/[^a-z0-9]/g, "_");
+        var url = "https://firestore.googleapis.com/v1/projects/" + PID +
+                  "/databases/(default)/documents/payments/" + docId +
+                  "?key=" + KEY;
+        await fetch(url, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fields: {
+              email: { stringValue: email },
+              plan: { stringValue: plan },
+              active: { booleanValue: true },
+              updatedAt: { timestampValue: new Date().toISOString() },
+            }
+          })
+        });
+      } catch(e) { console.log("Direct write info:", e.message); }
+    }
+
+    function show(id) {
+      document.getElementById("verifying").style.display = "none";
+      document.getElementById(id).style.display = "block";
+    }
+
+    function openExtension() {
+      // Open the extension directly if possible
+      try {
+        chrome.runtime.sendMessage({action: "openPopup"}, () => {
+          window.close();
+        });
+      } catch(e) {
+        // Fallback — can't access chrome from website
+        window.open("https://chromewebstore.google.com/detail/lcknjmnihbfgflhepcmjjcgiohnenpcc", "_blank");
+      }
+    }
+
+    verifyAndActivate();
+  </script>
+</body>
+</html>
