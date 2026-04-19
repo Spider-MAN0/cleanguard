@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanGuard Uninstalled</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #0a0a0f;
+      color: #f1f5f9;
+      font-family: 'DM Sans', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .shield {
+      font-size: 64px;
+      margin-bottom: 8px;
+      filter: grayscale(1) opacity(0.5);
+    }
+
+    .streak-gone {
+      font-size: 13px;
+      color: #ef4444;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(26px, 5vw, 38px);
+      font-weight: 800;
+      line-height: 1.2;
+      color: #f1f5f9;
+      margin-bottom: 16px;
+    }
+
+    h1 span { color: #ef4444; }
+
+    .subtitle {
+      font-size: 16px;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* Streak lost box */
+    .streak-box {
+      background: #1a1a2e;
+      border: 1px solid #2d2d44;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .streak-box-label {
+      font-size: 12px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .streak-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 56px;
+      font-weight: 800;
+      color: #ef4444;
+      line-height: 1;
+    }
+
+    .streak-unit {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Premium accountability box */
+    .accountability-box {
+      background: linear-gradient(135deg, #1a1a2e, #0f2818);
+      border: 1px solid #22c55e33;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 32px;
+      text-align: left;
+    }
+
+    .acc-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .acc-badge {
+      background: #22c55e;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 20px;
+    }
+
+    .acc-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #f1f5f9;
+    }
+
+    .acc-body {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .acc-body strong {
+      color: #22c55e;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-block;
+      width: 100%;
+      padding: 16px;
+      background: #22c55e;
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: background 0.2s;
+    }
+
+    .btn-primary:hover { background: #16a34a; }
+
+    .btn-secondary {
+      display: inline-block;
+      width: 100%;
+      padding: 14px;
+      background: transparent;
+      color: #64748b;
+      font-size: 14px;
+      border: 1px solid #2d2d44;
+      border-radius: 12px;
+      text-decoration: none;
+      margin-bottom: 32px;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: #94a3b8;
+      color: #94a3b8;
+    }
+
+    .footer-text {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.6;
+    }
+
+    .footer-text a {
+      color: #22c55e;
+      text-decoration: none;
+    }
+
+    /* Animated streak counter */
+    @keyframes countDown {
+      from { opacity: 1; transform: scale(1); }
+      to   { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    .streak-number.animate {
+      animation: countDown 0.6s ease forwards;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+
+    <div class="shield">🛡️</div>
+    <div class="streak-gone">Protection Removed</div>
+
+    <h1>Your streak just <span>ended</span>.</h1>
+    <p class="subtitle">
+      Every day you were protected was a real decision you made.<br>
+      You can always come back — and start again.
+    </p>
+
+    <!-- Streak lost display -->
+    <div class="streak-box">
+      <div class="streak-box-label">Streak lost</div>
+      <div class="streak-number" id="streakDisplay">—</div>
+      <div class="streak-unit">days of protection</div>
+    </div>
+
+    <!-- Premium accountability upsell -->
+    <div class="accountability-box">
+      <div class="acc-header">
+        <span class="acc-badge">PREMIUM</span>
+        <span class="acc-title">Accountability Partner Alerts</span>
+      </div>
+      <p class="acc-body">
+        With CleanGuard Premium, <strong>your accountability partner gets notified the moment you uninstall</strong> — before you can even open a new tab. 
+        The knowledge that someone will find out is the strongest protection there is.
+      </p>
+    </div>
+
+    <a href="https://cleanguard01.netlify.app · A product of Spider Corp/premium.html" class="btn-primary">
+      Upgrade to Premium — $4.99/month
+    </a>
+
+    <a href="https://chromewebstore.google.com/detail/lcknjmnihbfgflhepcmjjcgiohnenpcc" class="btn-secondary" id="reinstallBtn">
+      ↩ Reinstall CleanGuard — Start Fresh
+    </a>
+
+    <p class="footer-text">
+      Struggling right now? Visit <a href="https://www.reddit.com/r/pornfree" target="_blank">r/pornfree</a> or <a href="https://www.reddit.com/r/NoFap" target="_blank">r/NoFap</a>.<br>
+      You are not alone in this.
+    </p>
+
+  </div>
+
+  <script>
+    // Read streak from URL param (set by background.js on uninstall)
+    const params = new URLSearchParams(window.location.search);
+    const streak = parseInt(params.get("streak") || "0");
+    const el = document.getElementById("streakDisplay");
+    if (streak > 0) {
+      el.textContent = streak;
+    } else {
+      el.textContent = "0";
+    }
+  </script>
+</body>
+</html>
