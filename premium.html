@@ -3,233 +3,173 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanGuard Premium — Advanced Recovery Features</title>
+  <title>CleanGuard Premium</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WVRVYDKM7S"></script>
-  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-WVRVYDKM7S');</script>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-WVRVYDKM7S");</script>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <style>
-    :root{--green:#22c55e;--purple:#7c3aed;--bg:#080810;--surface:#111827;--border:#1e293b;--text:#f1f5f9;--muted:#64748b;}
+    :root{--green:#22c55e;--green-dark:#16a34a;--bg:#080810;--surface:#111827;--border:#1e293b;--text:#f1f5f9;--muted:#64748b;--purple:#7c3aed;--purple-light:#c4b5fd;}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;}
+    body{background:var(--bg);color:var(--text);font-family:"DM Sans",sans-serif;font-size:16px;line-height:1.6;min-height:100vh;}
     a{color:inherit;text-decoration:none;}
     nav{padding:16px 40px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
-    .nav-logo{display:flex;align-items:center;gap:10px;font-family:'Syne',sans-serif;font-weight:800;font-size:18px;}
-    .nav-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
-    main{max-width:900px;margin:0 auto;padding:60px 24px 100px;}
-    .hero{text-align:center;margin-bottom:60px;}
-    .badge{display:inline-block;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);border-radius:20px;padding:6px 16px;font-size:13px;color:#c4b5fd;font-weight:700;margin-bottom:20px;}
-    h1{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;margin-bottom:12px;}
-    h1 span{color:#c4b5fd;}
-    .subtitle{font-size:18px;color:var(--muted);max-width:560px;margin:0 auto;}
-
-    /* FEATURES */
-    .features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:60px;}
-    .feat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;transition:border-color 0.2s;}
-    .feat:hover{border-color:rgba(124,58,237,0.3);}
-    .feat-icon{font-size:28px;margin-bottom:10px;}
-    .feat h3{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:6px;}
-    .feat p{font-size:13px;color:var(--muted);line-height:1.5;}
-    .feat.coming{opacity:0.6;}
-    .feat-badge{display:inline-block;background:rgba(124,58,237,0.2);color:#c4b5fd;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:8px;}
-
-    /* WAITLIST CARD */
-    .waitlist-card{background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(99,102,241,0.05));border:1px solid rgba(124,58,237,0.3);border-radius:24px;padding:40px;margin-bottom:32px;text-align:center;}
-    .waitlist-card h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
-    .waitlist-card p{color:var(--muted);font-size:15px;margin-bottom:24px;}
-    .waitlist-form{display:flex;gap:10px;max-width:440px;margin:0 auto 12px;}
-    .waitlist-form input{flex:1;padding:13px 16px;background:#0a0a0f;border:1px solid rgba(124,58,237,0.3);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border 0.2s;}
-    .waitlist-form input:focus{border-color:rgba(124,58,237,0.7);}
-    .btn-waitlist{padding:13px 20px;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;border-radius:10px;border:none;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
-    .btn-waitlist:hover{opacity:0.9;transform:translateY(-1px);}
-    .success-msg{display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:#86efac;padding:12px 20px;border-radius:10px;font-size:14px;margin:12px auto 0;max-width:440px;}
-    .success-msg.show{display:block;}
-
-    /* SUBSCRIBE CARD */
-    .subscribe-card{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:40px;text-align:center;}
-    .subscribe-card h2{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;margin-bottom:8px;}
-    .subscribe-card p{color:var(--muted);font-size:15px;margin-bottom:28px;}
-    .subscribe-email{width:100%;max-width:400px;padding:14px 16px;background:#0a0a0f;border:1px solid var(--border);border-radius:12px;color:var(--text);font-size:15px;font-family:inherit;outline:none;transition:border 0.2s;margin-bottom:16px;display:block;margin-left:auto;margin-right:auto;}
-    .subscribe-email:focus{border-color:rgba(124,58,237,0.5);}
-    .btn-ngn{display:block;width:100%;max-width:400px;margin:0 auto 12px;padding:15px;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;border-radius:12px;border:none;cursor:pointer;transition:all 0.2s;}
-    .btn-ngn:hover{opacity:0.9;transform:translateY(-1px);}
-    .btn-usd{display:block;width:100%;max-width:400px;margin:0 auto 20px;padding:15px;background:transparent;color:#c4b5fd;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;border-radius:12px;border:1px solid rgba(124,58,237,0.4);cursor:pointer;transition:all 0.2s;}
+    .logo{display:flex;align-items:center;gap:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+    .nav-back{font-size:14px;color:var(--muted);transition:color 0.2s;}
+    .nav-back:hover{color:var(--text);}
+    .hero{text-align:center;padding:80px 24px 60px;max-width:700px;margin:0 auto;}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);border-radius:20px;padding:6px 16px;font-size:13px;color:var(--purple-light);font-weight:600;margin-bottom:24px;}
+    .hero h1{font-family:"Syne",sans-serif;font-size:clamp(32px,5vw,52px);font-weight:800;line-height:1.1;margin-bottom:16px;}
+    .hero h1 span{color:var(--purple-light);}
+    .hero p{font-size:17px;color:var(--muted);max-width:500px;margin:0 auto;}
+    .main{max-width:1000px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px;}
+    .card-title{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+    .card-sub{font-size:14px;color:var(--muted);margin-bottom:24px;}
+    .input-label{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:6px;display:block;}
+    .email-input{width:100%;padding:13px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:14px;font-family:inherit;outline:none;transition:border 0.2s;margin-bottom:14px;}
+    .email-input:focus{border-color:rgba(124,58,237,0.5);}
+    .btn-ngn{width:100%;padding:15px;background:linear-gradient(135deg,#7c3aed,#6366f1);color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:15px;border-radius:12px;border:none;cursor:pointer;margin-bottom:12px;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .btn-ngn:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(124,58,237,0.3);}
+    .btn-usd{width:100%;padding:15px;background:transparent;color:var(--purple-light);font-family:"Syne",sans-serif;font-weight:700;font-size:15px;border-radius:12px;border:1px solid rgba(124,58,237,0.4);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px;}
     .btn-usd:hover{background:rgba(124,58,237,0.1);}
-    .trust-badges{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;}
-    .trust-badge{font-size:12px;color:var(--muted);}
-
-    footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);color:var(--muted);font-size:13px;}
+    .trust{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:16px;}
+    .trust span{font-size:12px;color:var(--muted);}
+    .features-list{display:flex;flex-direction:column;gap:14px;}
+    .feat{display:flex;gap:14px;align-items:flex-start;}
+    .feat-icon{width:40px;height:40px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .feat h4{font-weight:600;font-size:14px;margin-bottom:2px;}
+    .feat p{font-size:13px;color:var(--muted);}
+    .price-tag{display:inline-block;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:8px;padding:4px 12px;font-size:12px;color:var(--green);font-weight:700;margin-bottom:20px;}
+    footer{border-top:1px solid var(--border);padding:32px;text-align:center;font-size:13px;color:var(--muted);}
     footer a{color:var(--green);}
-
-    @media(max-width:600px){.waitlist-form{flex-direction:column;}.nav{padding:14px 20px;}}
+    @media(max-width:768px){.main{grid-template-columns:1fr;}.hero{padding:50px 24px 40px;}}
   </style>
 </head>
 <body>
-
 <nav>
-  <a class="nav-logo" href="index.html">
-    <div class="nav-logo-icon">🛡</div>CleanGuard
-  </a>
-  <a href="https://chromewebstore.google.com/detail/lcknjmnihbfgflhepcmjjcgiohnenpcc"
-    style="padding:9px 18px;background:var(--green);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;border-radius:10px;">
-    Add to Chrome — Free
-  </a>
+  <a class="logo" href="index.html" style="margin-bottom: 20px; display: block;"><div class="logo-icon">shield</div>CleanGuard</a>
+  <a href="index.html" class="nav-back">Back to home</a>
 </nav>
-
-<main>
-  <!-- HERO -->
-  <div class="hero">
-    <div class="badge">⚡ Coming Soon</div>
-    <h1>CleanGuard <span>Premium</span></h1>
-    <p class="subtitle">Advanced accountability and recovery features for people serious about staying clean.</p>
-  </div>
-
-  <!-- FEATURES -->
-  <div class="features-grid">
-    <div class="feat">
-      <div class="feat-icon">🤝</div>
-      <h3>Accountability Partner</h3>
-      <p>Your chosen person gets notified the moment your streak breaks or you uninstall CleanGuard. Knowing someone will find out is the strongest protection.</p>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">❄️</div>
-      <h3>Streak Freeze</h3>
-      <p>Slip up once in a while? Protect your streak once per week. Your progress stays intact and you keep going without starting over.</p>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">⏰</div>
-      <h3>Scheduled Lock</h3>
-      <p>Auto-enable protection at set times — for example 10pm to 6am. No willpower required. CleanGuard activates before the dangerous hours begin.</p>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">📋</div>
-      <h3>Custom Blocklist</h3>
-      <p>Add your own sites to the blocklist. Any URL that triggers you personally can be blocked with one tap — beyond the built-in 500+.</p>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">📊</div>
-      <h3>Insights Dashboard</h3>
-      <p>Weekly report showing exactly when and where you're most vulnerable. Patterns, triggers, and progress over time — so you can get ahead of relapses.</p>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🔄</div>
-      <h3>Cross-Device Sync</h3>
-      <p>Your streak, settings and block list stay in sync across every device you use Chrome on. One account, total protection everywhere.</p>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🔔</div>
-      <h3>Uninstall Alerts</h3>
-      <p>Your accountability partner is notified the moment you uninstall CleanGuard — before you can open a new tab. The strongest accountability feature we have.</p>
-    </div>
-    <div class="feat coming">
-      <div class="feat-icon">🤖</div>
-      <h3>AI Shield <span class="feat-badge">SOON</span></h3>
-      <p>Vision-based content detection that catches explicit images even on sites not in the blocklist. No keywords needed — it sees what you see.</p>
+<div class="hero">
+  <div class="badge">PREMIUM</div>
+  <h1>CleanGuard<br><span>Premium</span></h1>
+  <p>Take control of your recovery with advanced features.</p>
+</div>
+<div class="main">
+  <div>
+    <div class="features-list">
+      <div class="feat"><div class="feat-icon">🤝</div><div><h4>Accountability Partner</h4><p>Your person gets notified when your streak breaks or you uninstall</p></div></div>
+      <div class="feat"><div class="feat-icon">❄️</div><div><h4>Streak Freeze</h4><p>Protect your streak once a week if you slip</p></div></div>
+      <div class="feat"><div class="feat-icon">⏰</div><div><h4>Scheduled Lock</h4><p>Auto-enable protection at set times — e.g. 10pm to 6am</p></div></div>
+      <div class="feat"><div class="feat-icon">📋</div><div><h4>Custom Blocklist</h4><p>Add your own sites on top of the 500+ defaults</p></div></div>
+      <div class="feat"><div class="feat-icon">📊</div><div><h4>Insights Dashboard</h4><p>Weekly report showing when you are most vulnerable and why</p></div></div>
+      <div class="feat"><div class="feat-icon">🔄</div><div><h4>Cross-Device Sync</h4><p>Your streak follows you across all Chrome devices</p></div></div>
+      <div class="feat"><div class="feat-icon">🤖</div><div><h4>AI Shield</h4><p>Vision-based explicit image detection</p></div></div>
+      <div class="feat"><div class="feat-icon">🔔</div><div><h4>Uninstall Alerts</h4><p>Partner notified the moment you uninstall the extension</p></div></div>
     </div>
   </div>
-
-  <!-- WAITLIST CARD -->
-  <div class="waitlist-card">
-    <h2>🎉 Be first. Get 50% off at launch.</h2>
-    <p>Join the waitlist and lock in your early-bird discount. One email when we launch — no spam.</p>
-    <div class="waitlist-form">
-      <input type="email" id="waitlistEmail" placeholder="your@email.com"/>
-      <button class="btn-waitlist" id="waitlistBtn">Join Waitlist</button>
-    </div>
-    <div class="success-msg" id="waitlistSuccess">
-      ✓ You're on the list! We'll email you at launch with your 50% discount.
-    </div>
-    <p style="font-size:12px;color:var(--muted);margin-top:12px;">No spam. Unsubscribe anytime.</p>
-  </div>
-
-  <!-- SUBSCRIBE CARD -->
-  <div class="subscribe-card">
-    <h2>Subscribe Now</h2>
-    <p>Enter your email and choose your plan. Secure payment via Paystack.</p>
-    <input type="email" id="subscribeEmail" class="subscribe-email" placeholder="your@email.com"/>
-    <button class="btn-ngn" onclick="payNow('NGN')">
-      🇳🇬 &nbsp; Subscribe — ₦2,000 / month
-    </button>
-    <button class="btn-usd" onclick="payNow('USD')">
-      🌍 &nbsp; Subscribe — $4.99 / month (International)
-    </button>
-    <div class="trust-badges">
-      <span class="trust-badge">🔒 Secured by Paystack</span>
-      <span class="trust-badge">·</span>
-      <span class="trust-badge">Cancel anytime</span>
-      <span class="trust-badge">·</span>
-      <span class="trust-badge">Receipt via email</span>
+  <div style="display:flex;flex-direction:column;gap:24px;">
+    
+    <div class="card" style="border-color:rgba(124,58,237,0.3);">
+      <div class="card-title">Subscribe now</div>
+      <div class="card-sub">Get access to premium features.</div>
+      <label class="input-label" for="subscribeEmail">Your email address</label>
+      <input type="email" id="subscribeEmail" class="email-input" placeholder="your@email.com" autocomplete="email"/>
+      <button class="btn-ngn" onclick="payNow('NGN')">Nigeria — ₦2,000/month</button>
+      <button class="btn-usd" onclick="payNow('USD')">International — $4.99/month</button>
+      <div class="trust">
+        <span>Secured by Paystack</span>
+        <span>Cancel anytime</span>
+        <span>Receipt via email</span>
+      </div>
     </div>
   </div>
-</main>
-
+</div>
 <footer>
-  © 2026 Spider Corp. All rights reserved. · CleanGuard is a product of Spider Corp.<br><br>
+  © 2026 Spider Corp. All rights reserved.<br>
   <a href="privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
   <a href="terms.html">Terms of Service</a> &nbsp;·&nbsp;
   <a href="mailto:cleanguard001@gmail.com">cleanguard001@gmail.com</a>
 </footer>
+<script>
+  // Detect user location and show appropriate price
+  fetch('https://ipapi.co/json/')
+    .then(response => response.json())
+    .then(data => {
+      const userCountry = data.country_code;
+      const isNigeria = userCountry === 'NG';
+      
+      const ngnBtn = document.querySelector('.btn-ngn');
+      const usdBtn = document.querySelector('.btn-usd');
+      
+      if (isNigeria) {
+        // Show NGN button, hide USD
+        if (ngnBtn) ngnBtn.style.display = 'block';
+        if (usdBtn) usdBtn.style.display = 'none';
+      } else {
+        // Show USD button, hide NGN
+        if (ngnBtn) ngnBtn.style.display = 'none';
+        if (usdBtn) usdBtn.style.display = 'block';
+      }
+    })
+    .catch(err => {
+      // Default to showing both if geolocation fails
+      console.log('Geolocation failed, showing both options');
+    });
+</script>
 
 <script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
-  const PAYSTACK_KEY = "pk_live_b9b0ed508f5dc2c7ad9a7f772297f2595c3a0012";
+  var PKEY = "pk_live_b9b0ed508f5dc2c7ad9a7f772297f2595c3a0012";
 
-  // ── WAITLIST ──
-  document.getElementById("waitlistBtn").addEventListener("click", function() {
-    const email = document.getElementById("waitlistEmail").value.trim();
-    if (!email || !email.includes("@")) {
+  function joinWaitlist() {
+    var email = document.getElementById("waitlistEmail").value.trim();
+    if (!email || email.indexOf("@") < 0) {
       document.getElementById("waitlistEmail").style.borderColor = "rgba(239,68,68,0.5)";
       document.getElementById("waitlistEmail").focus();
       return;
     }
-    this.disabled = true;
-    this.textContent = "Joining...";
+    document.getElementById("waitlistEmail").style.borderColor = "";
+    var btn = document.getElementById("waitlistBtn");
+    btn.disabled = true;
+    btn.textContent = "Joining...";
     fetch("https://formspree.io/f/mlgopoqr", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({ email: email, _subject: "CleanGuard Premium Waitlist", source: "premium-page" })
-    }).then(() => {
-      document.getElementById("waitlistEmail").style.display = "none";
-      document.getElementById("waitlistBtn").style.display = "none";
-      document.getElementById("waitlistSuccess").classList.add("show");
-    }).catch(() => {
-      document.getElementById("waitlistSuccess").classList.add("show");
+      headers: {"Content-Type": "application/json", "Accept": "application/json"},
+      body: JSON.stringify({email: email, _subject: "CleanGuard Premium Waitlist"})
+    }).finally(function() {
+      btn.style.display = "none";
+      document.getElementById("waitlistSuccess").style.display = "block";
     });
-  });
+  }
 
-  // ── PAY NOW ──
   function payNow(currency) {
-    const email = document.getElementById("subscribeEmail").value.trim();
-    if (!email || !email.includes("@")) {
+    var email = document.getElementById("subscribeEmail").value.trim();
+    if (!email || email.indexOf("@") < 0) {
       document.getElementById("subscribeEmail").style.borderColor = "rgba(239,68,68,0.5)";
       document.getElementById("subscribeEmail").focus();
-      alert("Please enter your email address first.");
+      setTimeout(function(){ document.getElementById("subscribeEmail").style.borderColor = ""; }, 2000);
       return;
     }
-
-    const amount = currency === "NGN" ? 200000 : 499; // kobo for NGN, cents for USD
-
-    const handler = PaystackPop.setup({
-      key: PAYSTACK_KEY,
+    var amount = currency === "NGN" ? 200000 : 499;
+    var cfg = {
+      key: PKEY,
       email: email,
       amount: amount,
       currency: currency,
-      ref: "cg_" + new Date().getTime(),
-      plan: currency === "NGN" ? "PLN_08ykesll2sshn37" : "",
-      metadata: {
-        product: "CleanGuard Premium",
-        plan: "monthly",
-        uid: email,
-      },
-      callback: function(response) {
-        window.location.href = "/payment-success.html?reference=" + response.reference;
-      },
-      onClose: function() {
-        console.log("Payment closed");
-      }
-    });
-    handler.openIframe();
+      ref: "cg_" + Date.now(),
+      metadata: {product: "CleanGuard Premium", uid: email},
+      callback: function(r) { window.location.href = "/payment-success.html?reference=" + r.reference; },
+      onClose: function() {}
+    };
+    if (currency === "NGN") cfg.plan = "PLN_08ykesll2sshn37";
+    PaystackPop.setup(cfg).openIframe();
   }
+
+  document.getElementById("waitlistEmail").addEventListener("keydown", function(e){ if(e.key==="Enter") joinWaitlist(); });
+  document.getElementById("subscribeEmail").addEventListener("keydown", function(e){ if(e.key==="Enter") payNow("NGN"); });
 </script>
 </body>
 </html>
